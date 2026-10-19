@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TaskEdu</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+    h1 { margin-bottom: .25rem; }
+    form.registro { display: grid; gap: .5rem; margin: 1rem 0; }
+    input, button { padding: .5rem; font-size: 1rem; }
+    .msg { padding: .5rem .75rem; border-radius: 6px; margin: .5rem 0; }
+    .msg.ok { background: #e3f6e8; }
+    .msg.error { background: #fde7e7; }
+    .filtros a { margin-right: .75rem; }
+    .filtros a.activo { font-weight: bold; text-decoration: none; }
+    ul { list-style: none; padding: 0; }
+    li { border: 1px solid #ddd; border-radius: 8px; padding: .75rem; margin: .5rem 0; display: flex; justify-content: space-between; align-items: center; }
+    .Terminada .titulo { text-decoration: line-through; color: #777; }
+    .estado { font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <h1>TaskEdu</h1>
+  <p>Gestor de tareas académicas</p>
+
+  {% with mensajes = get_flashed_messages(with_categories=true) %}
+    {% for categoria, texto in mensajes %}
+      <div class="msg {{ categoria }}">{{ texto }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <form class="registro" method="post" action="{{ url_for('registrar') }}">
+    <input name="titulo" placeholder="Título de la tarea">
+    <input name="asignatura" placeholder="Asignatura">
+    <input name="fecha" type="date">
+    <button type="submit">Registrar tarea</button>
+  </form>
+
+  <nav class="filtros">
+    {% for f in filtros %}
+      <a href="{{ url_for('index', estado=f) }}" class="{{ 'activo' if f == filtro_actual else '' }}">{{ f }}</a>
+    {% endfor %}
+  </nav>
+
+  {% if tareas %}
+    <ul>
+      {% for t in tareas %}
+        <li class="{{ t.estado }}">
+          <div>
+            <div class="titulo"><strong>{{ t.titulo }}</strong></div>
+            <div>{{ t.asignatura }} · entrega: {{ t.fecha }}</div>
+            <div class="estado">Estado: {{ t.estado }}</div>
+          </div>
+          {% if t.estado == 'Pendiente' %}
+            <form method="post" action="{{ url_for('terminar', id_tarea=t.id) }}">
+              <input type="hidden" name="estado" value="{{ filtro_actual }}">
+              <button type="submit">Marcar como terminada</button>
+            </form>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No hay tareas para mostrar. ¡Registra la primera!</p>
+  {% endif %}
+</body>
+</html>
