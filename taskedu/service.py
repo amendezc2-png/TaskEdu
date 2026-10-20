@@ -84,10 +84,14 @@ class TaskService:
         return sorted(tareas, key=lambda t: (t.fecha, t.id))
 
     # ---------- HU-03: cambiar estado ----------
-    def terminar(self, id_tarea):
+    def _buscar(self, id_tarea):
         for tarea in self._tareas:
             if tarea.id == id_tarea:
-                tarea.estado = TERMINADA
-                self._guardar()
                 return tarea
         raise KeyError(f"No existe la tarea {id_tarea}.")
+
+    def terminar(self, id_tarea):
+        tarea = self._buscar(id_tarea)
+        tarea.estado = TERMINADA
+        self._guardar()
+        return tarea
