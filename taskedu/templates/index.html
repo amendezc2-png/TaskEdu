@@ -31,7 +31,7 @@
   {% endwith %}
 
   <form class="registro" method="post" action="{{ url_for('registrar') }}">
-    <input name="titulo" placeholder="Título de la tarea">
+    <input name="titulo" placeholder="Título de la tarea (obligatorio)">
     <input name="asignatura" placeholder="Asignatura">
     <input name="fecha" type="date">
     <button type="submit">Registrar tarea</button>
