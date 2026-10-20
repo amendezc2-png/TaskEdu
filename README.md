@@ -2,6 +2,7 @@
 
 Gestor de tareas académicas (producto mínimo viable) hecho con Python y Flask.
 
+
 ## Cómo ejecutarlo
 
 ```bash
