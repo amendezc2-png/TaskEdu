@@ -42,7 +42,7 @@
       <a href="{{ url_for('index', estado=f) }}" class="{{ 'activo' if f == filtro_actual else '' }}">{{ f }}</a>
     {% endfor %}
   </nav>
-
+<p>Tareas mostradas: {{ tareas|length }}</p>
   {% if tareas %}
     <ul>
       {% for t in tareas %}
